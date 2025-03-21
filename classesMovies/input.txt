@@ -1,0 +1,30 @@
+7
+Arrival
+Denis Villeneuve
+2016
+116
+Wall-E
+Andrew Stanton
+2008
+98
+Drive
+Nicolas Winding Refn
+2011
+100
+Dune: Part One
+Denis Villeneuve
+2021
+155
+Dune: Part Two
+Denis Villeneuve
+2024
+166
+Spider-Man: Into the Spider-Verse
+Bob Perischetti
+2018
+117
+Spider-Man: Across the Spider-Verse
+Joaquim Dos Santos
+2023
+140
+1
