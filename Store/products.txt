@@ -1,0 +1,3 @@
+P1,Apple,Red delicious fruit,1.99,50
+P2,Banana,Yellow tropical fruit,0.99,2
+P3,Bread,Whole wheat loaf,3.49,30
