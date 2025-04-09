@@ -12,7 +12,49 @@ using namespace std;
 #include "cart.hpp"
 #include "storeFront.hpp"
 
+class StoreBack {
+    private:
+        vector<Product> inventory;
+        ShoppingCart currentCart;
+    
+        void updateInventory() {
+            for (const auto& item : currentCart.getItems()) {
+                Product* product = item.first;
+                int quantity = item.second;
+                product->setQuantity(product->getQuantity() - quantity);
+            }
+        }
+    
+	public:
+		void newProduct() { // Create new product
+            // id is 1 more than last id, 
+            int id = inventory.back().getId() + 1;
+            cout << "Creating new product\n" 
+                 << "id: " << id << endl;
+            string name;
+            cout << "Name: ";
+            getline(cin, name);
+            string description;
+            cout << "Description: ";
+            getline(cin, name);
+            float price;
+            cout << "Price: ";
+            cin >> price;
+            int quantity;
+            cout << "Quantity: ";
+            cin >> quantity;
+            Product tempProduct(id, name, description, price, quantity);
+            inventory.push_back(tempProduct);
+        }
+
+		void editProduct(string id); // Change product information
+
+		void removeProduct(string id); // Remove a product
+
+};
+
 int main() {
+    StoreBack manager;
     StoreFront store;
     store.loadProductsFromFile("products.txt");
 
@@ -20,10 +62,10 @@ int main() {
         cout << "======================\n"
              << "   Store Front Menu   \n"
              << "======================\n"
-             << "1. View Products\n"
-             << "2. View Cart\n"
-             << "3. Checkout\n"
-             << "4. Exit\n"
+             << "1. View Products      \n"
+             << "2. View Cart          \n"
+             << "3. Checkout           \n"
+             << "4. Exit               \n"
              << "Enter your choice: ";
 
         int choice;
@@ -38,10 +80,10 @@ int main() {
             case 1: {
                 store.displayProductCatalog();
                 cout << "Enter product ID to add to cart (or 0 to return): ";
-                string productId;
+                int productId;
                 cin >> productId;
                 
-                if (productId == "0") break;
+                if (productId == 0) break;
                 
                 Product* product = store.getProductById(productId);
                 if (product) {
@@ -77,6 +119,10 @@ int main() {
                 store.saveProductsToFile("products.txt");
                 cout << "Thank you for shopping with us!\n";
                 return 0;
+
+            case 5:
+                store.newProduct();
+                break;
             
             default:
                 cout << "Invalid choice. Please try again.\n";

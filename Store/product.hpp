@@ -7,17 +7,19 @@ using namespace std;
 
 class Product {
 private:
-    string id;
+    int id;
     string name;
     string description;
     float price;
     int quantity;
     
 public:
-    Product(string id, string name, string description, float price, int quantity)
+    Product(int id, string name, string description, float price, int quantity)
         : id(id), name(name), description(description), price(price), quantity(quantity) {}
+    Product(string id, string name, string description, float price, int quantity)
+    : id(stoi(id)), name(name), description(description), price(price), quantity(quantity) {}
 
-    string getId() const { return id; }
+    int getId() const { return id; }
     string getName() const { return name; }
     string getDescription() const { return description; }
     float getPrice() const { return price; }

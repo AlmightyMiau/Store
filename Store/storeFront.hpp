@@ -27,13 +27,15 @@ class StoreFront {
     
         void displayProductCatalog() const;
     
-        Product* getProductById(const string& id);
+        Product* getProductById(const int& id);
     
         void processOrder();
     
         void processPayment(float amount);
     
         ShoppingCart& getCart() { return currentCart; }
+
+        void newProduct(); // Create new product
 };
 
 #endif

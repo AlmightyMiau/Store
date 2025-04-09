@@ -57,7 +57,7 @@ void StoreFront::displayProductCatalog() const {
     }
 }
 
-Product* StoreFront::getProductById(const string& id) {
+Product* StoreFront::getProductById(const int& id) {
     for (auto& product : inventory) {
         if (product.getId() == id) {
             return &product;
@@ -95,4 +95,26 @@ void StoreFront::processPayment(float amount) {
     }
     
     cout << "Payment processed successfully!\n\n";
+}
+
+void StoreFront::newProduct() { // Create new product
+    // id is 1 more than last id, 
+    int id = inventory.back().getId() + 1;
+    cout << "Creating new product\n" 
+         << "id: " << id << endl;
+    cin.ignore();
+    string name;
+    cout << "Name: ";
+    getline(cin, name);
+    string description;
+    cout << "Description: ";
+    getline(cin, description);
+    float price;
+    cout << "Price: ";
+    cin >> price;
+    int quantity;
+    cout << "Quantity: ";
+    cin >> quantity;
+    Product tempProduct(id, name, description, price, quantity);
+    inventory.push_back(tempProduct);
 }
