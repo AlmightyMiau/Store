@@ -106,18 +106,22 @@ int main() {
 
                         switch (adminChoice) {
                             case 1: 
+                                cin.ignore(); // Remove whitespace so Admin::NewProduct() will work
                                 store.displayProductCatalog();
                                 break;
                             case 2:
+                                cin.ignore(); // Remove whitespace so Admin::NewProduct() will work
                                 admin.editProduct();
                                 break;
                             case 3:
+                                cin.ignore(); // Remove whitespace so Admin::NewProduct() will work
                                 admin.newProduct();
                                 break;
                             case 4:
+                                cin.ignore(); // Remove whitespace so Admin::NewProduct() will work
                                 admin.deleteProduct();
                                 break;
-                            default:
+                            case 5:
                                 break;
                         }
                     } while (adminChoice != 5);

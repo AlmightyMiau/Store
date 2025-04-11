@@ -36,35 +36,43 @@ bool Admin::login(const string user, const string password) {
 };
 
 void Admin::newProduct() { // Create new product
-    if (!isAdmin) {
+    if (!isAdmin) { // Only accessible if user is logged in as admin
         cout << "ERROR: User is not admin" << endl;
         return;
     }
 
     // id is 1 more than last id, 
     int id = store->getInventory().back().getId() + 1;
-    cout << "Creating new product\n" 
+    cout << "Creating new product (Enter -1 for any value to cancel)\n" 
         << "id: " << id << endl;
 
     // Get new product name
     string name;
     cout << "Name: ";
     getline(cin, name);
+    // Check for exit value
+    if (name == "-1") {return;}
 
     // Get new product description
     string description;
     cout << "Description: ";
     getline(cin, description);
+    // Check for exit value
+    if (description == "-1") {return;}
 
     // Get new product price
     float price;
     cout << "Price: ";
     cin >> price;
+    // Check for exit value
+    if (price == -1) {return;} 
 
     // Get new product quantity
     int quantity;
     cout << "Quantity: ";
     cin >> quantity;
+    // Check for exit value
+    if (quantity == -1) {return;} 
 
     // Ignore the whitespace!!!
     cin.ignore();
@@ -78,7 +86,7 @@ void Admin::newProduct() { // Create new product
 }
 
 void Admin::editProduct() { // Edit a product
-    if (!isAdmin) {
+    if (!isAdmin) { // Only accessible if user is logged in as admin
         cout << "ERROR: User is not admin" << endl;
         return;
     }
@@ -88,7 +96,7 @@ void Admin::editProduct() { // Edit a product
 
     // Ask for which product id to edit
     int choice;
-    cout << "Select product (id) to edit: ";
+    cout << "Select product (id) to edit (or -1 to exit): ";
     // only accept ints as input
     while (!(cin >> choice)) {
         cin.clear();
@@ -97,6 +105,9 @@ void Admin::editProduct() { // Edit a product
     }
     // Ignore the whitespace!!!
     cin.ignore();
+
+    // Check for exit value
+    if (choice == -1) {return;}
     
     // Find location of selected product
     int i = 0;
@@ -133,33 +144,49 @@ void Admin::editProduct() { // Edit a product
         switch (selectedProperty) {
             case 1: { // Name
                 string newName;
-                cout << "Enter new name: ";
+                cout << "Enter new name (-1 to exit): ";
                 getline(cin, newName);
+
+                // Check for exit value
+                if (newName == "-1") {break;}
+
                 currentProduct->setName(newName);
                 break;
             }
             case 2: { // Description
                 string newDesc;
-                cout << "Enter new description (one line only): ";
+                cout << "Enter new description (one line only) (-1 to exit): ";
                 getline(cin, newDesc);
+
+                // Check for exit value
+                if (newDesc == "-1") {break;}
+
                 currentProduct->setDescription(newDesc);
                 break;
             }
             case 3: { // Price
                 float newPrice;
-                cout << "Enter new price: ";
+                cout << "Enter new price (-1 to exit): ";
                 cin >> newPrice;
                 // Ignore the whitespace!!!
                 cin.ignore();
+
+                // Check for exit value
+                if (newPrice == -1) {break;} 
+
                 currentProduct->setPrice(newPrice);
                 break;
             }
             case 4: { // Quantity
                 int newQuant;
-                cout << "Enter new quantity: ";
+                cout << "Enter new quantity (-1 to exit): ";
                 cin >> newQuant;
                 // Ignore the whitespace!!!
                 cin.ignore();
+
+                // Check for exit value
+                if (newQuant == -1) {break;} 
+
                 currentProduct->setQuantity(newQuant);
                 break;
             }
@@ -173,7 +200,7 @@ void Admin::editProduct() { // Edit a product
 };
 
 void Admin::deleteProduct() { // Delete a product
-    if (!isAdmin) {
+    if (!isAdmin) { // Only accessible if user is logged in as admin
         cout << "ERROR: User is not admin" << endl;
         return;
     }
@@ -183,7 +210,7 @@ void Admin::deleteProduct() { // Delete a product
 
     // Ask for product to delete (by id)
     int choice;
-    cout << "Select product # to delete: ";
+    cout << "Select product # to delete (-1 to exit): ";
     // only accept ints as input
     while (!(cin >> choice)) {
         cin.clear();
@@ -192,6 +219,9 @@ void Admin::deleteProduct() { // Delete a product
     }
     // Ignore the whitespace!!!
     cin.ignore();
+    
+    // Check for exit value
+    if (choice == -1) {return;} 
 
     // Find location of selected product
     int i = 0;

@@ -1,6 +1,4 @@
 1,Apple,Red delicious fruit,1.99,50
-2,Banana,Yellow tropical fruit,0.99,2
 3,Bread,Whole wheat loaf,3.49,30
-4,It is very yummy I love eating cat food,,1.5,50
-5,mrrp,,0,2
-6,meow,mrrpp,0,2
+5,lesbos,WHY DOES IT WORK NOW????,4.2,105
+6,>w<,mreow mrrpp meow >w<,0,1
