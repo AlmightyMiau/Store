@@ -12,20 +12,28 @@ using namespace std;
 
 #include "cart.hpp"
 #include "product.hpp"
+#include "admin.hpp"
 
 class StoreFront {
     private:
-        vector<Product> inventory;
         ShoppingCart currentCart;
-    
+        string filename = "products.txt";
         void updateInventory();
+
+        friend class Admin;
+    
+    protected:
+        vector<Product> inventory;
+
+        vector<Product>& getInventory() { return inventory; };
     
     public:
-        void loadProductsFromFile(const string& filename);
+
+        void loadProductsFromFile();
     
-        void saveProductsToFile(const string& filename);
+        void saveProductsToFile();
     
-        void displayProductCatalog() const;
+        void displayProductCatalog();
     
         Product* getProductById(const int& id);
     
@@ -35,7 +43,6 @@ class StoreFront {
     
         ShoppingCart& getCart() { return currentCart; }
 
-        void newProduct(); // Create new product
 };
 
 #endif

@@ -21,8 +21,11 @@ public:
 
     int getId() const { return id; }
     string getName() const { return name; }
+    void setName(string n) {this->name = n;}
     string getDescription() const { return description; }
+    void setDescription(string d) {this->description = d;}
     float getPrice() const { return price; }
+    void setPrice(float p) {this->price = p;}
     int getQuantity() const { return quantity; }
     void setQuantity(int q) { quantity = q; }
 

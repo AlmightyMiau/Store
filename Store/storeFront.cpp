@@ -8,7 +8,7 @@ void StoreFront::updateInventory() {
     }
 }
 
-void StoreFront::loadProductsFromFile(const string& filename) {
+void StoreFront::loadProductsFromFile() {
     ifstream file(filename);
     if (!file) {
         cerr << "Error opening file: " << filename << endl;
@@ -16,6 +16,7 @@ void StoreFront::loadProductsFromFile(const string& filename) {
     }
 
     string line;
+    inventory.clear();
     while (getline(file, line)) {
         stringstream ss(line);
         string id, name, desc, priceStr, qtyStr;
@@ -37,7 +38,7 @@ void StoreFront::loadProductsFromFile(const string& filename) {
     file.close();
 }
 
-void StoreFront::saveProductsToFile(const string& filename) {
+void StoreFront::saveProductsToFile() {
     ofstream file(filename);
     for (const auto& product : inventory) {
         file << product.getId() << ","
@@ -49,10 +50,11 @@ void StoreFront::saveProductsToFile(const string& filename) {
     file.close();
 }
 
-void StoreFront::displayProductCatalog() const {
+void StoreFront::displayProductCatalog() {
+    // loadProductsFromFile();
     cout << "\nProduct Catalog:\n";
     cout << "----------------\n";
-    for (const auto& product : inventory) {
+    for (const Product& product : inventory) {
         product.display();
     }
 }
@@ -74,7 +76,7 @@ void StoreFront::processOrder() {
         cout << "Proceeding to checkout...\n";
         processPayment(total);
         updateInventory();
-        saveProductsToFile("products.txt");
+        saveProductsToFile();
         currentCart.clearCart();
     }
 }
@@ -95,26 +97,4 @@ void StoreFront::processPayment(float amount) {
     }
     
     cout << "Payment processed successfully!\n\n";
-}
-
-void StoreFront::newProduct() { // Create new product
-    // id is 1 more than last id, 
-    int id = inventory.back().getId() + 1;
-    cout << "Creating new product\n" 
-         << "id: " << id << endl;
-    cin.ignore();
-    string name;
-    cout << "Name: ";
-    getline(cin, name);
-    string description;
-    cout << "Description: ";
-    getline(cin, description);
-    float price;
-    cout << "Price: ";
-    cin >> price;
-    int quantity;
-    cout << "Quantity: ";
-    cin >> quantity;
-    Product tempProduct(id, name, description, price, quantity);
-    inventory.push_back(tempProduct);
 }

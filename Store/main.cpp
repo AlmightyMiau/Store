@@ -11,52 +11,13 @@ using namespace std;
 #include "product.hpp"
 #include "cart.hpp"
 #include "storeFront.hpp"
+#include "admin.hpp"
 
-class StoreBack {
-    private:
-        vector<Product> inventory;
-        ShoppingCart currentCart;
-    
-        void updateInventory() {
-            for (const auto& item : currentCart.getItems()) {
-                Product* product = item.first;
-                int quantity = item.second;
-                product->setQuantity(product->getQuantity() - quantity);
-            }
-        }
-    
-	public:
-		void newProduct() { // Create new product
-            // id is 1 more than last id, 
-            int id = inventory.back().getId() + 1;
-            cout << "Creating new product\n" 
-                 << "id: " << id << endl;
-            string name;
-            cout << "Name: ";
-            getline(cin, name);
-            string description;
-            cout << "Description: ";
-            getline(cin, name);
-            float price;
-            cout << "Price: ";
-            cin >> price;
-            int quantity;
-            cout << "Quantity: ";
-            cin >> quantity;
-            Product tempProduct(id, name, description, price, quantity);
-            inventory.push_back(tempProduct);
-        }
-
-		void editProduct(string id); // Change product information
-
-		void removeProduct(string id); // Remove a product
-
-};
 
 int main() {
-    StoreBack manager;
     StoreFront store;
-    store.loadProductsFromFile("products.txt");
+    store.loadProductsFromFile();
+    Admin admin(&store);
 
     while (true) {
         cout << "======================\n"
@@ -65,7 +26,8 @@ int main() {
              << "1. View Products      \n"
              << "2. View Cart          \n"
              << "3. Checkout           \n"
-             << "4. Exit               \n"
+             << "4. Login              \n"
+             << "5. Exit               \n"
              << "Enter your choice: ";
 
         int choice;
@@ -77,7 +39,7 @@ int main() {
         }
 
         switch (choice) {
-            case 1: {
+            case 1: { // View Products
                 store.displayProductCatalog();
                 cout << "Enter product ID to add to cart (or 0 to return): ";
                 int productId;
@@ -107,22 +69,66 @@ int main() {
                 break;
             }
             
-            case 2:
+            case 2: // View Cart
                 store.getCart().displayCart();
                 break;
             
-            case 3:
+            case 3: // Checkout
                 store.processOrder();
                 break;
+
+            case 4: { // Login
+                    string password;
+                if (!admin.islogged()) {
+                    cout << "Input Admin password: ";
+                    cin >> password;
+                }
+                if (admin.login("Admin", password) || admin.islogged()) {
+                    int adminChoice;
+                    do {
+                        // Display Admin Menu
+                        cout << "======================\n"
+                            << "      Admin Menu      \n"
+                            << "======================\n"
+                            << "1. View Products      \n"
+                            << "2. Edit Product       \n"
+                            << "3. Create Product     \n"
+                            << "4. Delete Product     \n"
+                            << "5. Exit               \n"
+                            << "Enter your choice: ";
+
+                        // only accept ints as input
+                        while (!(cin >> adminChoice)) {
+                            cin.clear();
+                            cin.ignore();
+                            cout << "Invalid input. Please enter a number: ";
+                        }
+
+                        switch (adminChoice) {
+                            case 1: 
+                                store.displayProductCatalog();
+                                break;
+                            case 2:
+                                admin.editProduct();
+                                break;
+                            case 3:
+                                admin.newProduct();
+                                break;
+                            case 4:
+                                admin.deleteProduct();
+                                break;
+                            default:
+                                break;
+                        }
+                    } while (adminChoice != 5);
+                }
+                break;
+            }
             
-            case 4:
-                store.saveProductsToFile("products.txt");
+            case 5:
+                store.saveProductsToFile();
                 cout << "Thank you for shopping with us!\n";
                 return 0;
-
-            case 5:
-                store.newProduct();
-                break;
             
             default:
                 cout << "Invalid choice. Please try again.\n";
