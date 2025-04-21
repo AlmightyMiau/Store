@@ -1,2 +1,6 @@
-New accounts (save to file)
-Passwords file
+ X  New accounts (save to file)
+ X  Passwords file
+ X  User.hpp
+ X  File that holds all users, Passwords, and who is admin
+1 file each for every user
+user files hold cart from previous session

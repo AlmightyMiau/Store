@@ -6,6 +6,7 @@
 
 class ShoppingCart {
     private:
+        // Key-value pairs of Product and Quantity being bought (not always needed)
         map<Product*, int> items;
     
     public:

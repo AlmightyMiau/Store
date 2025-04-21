@@ -12,12 +12,18 @@ using namespace std;
 #include "cart.hpp"
 #include "storeFront.hpp"
 #include "admin.hpp"
+#include "userManagement.hpp"
+#include "user.hpp"
 
 
 int main() {
     StoreFront store;
     store.loadProductsFromFile();
-    Admin admin(&store);
+    Admin admin(&store); 
+    UserManagement Users; // Methods to manage users
+    User currentUser; // User info once logged in
+    Users.loadFromFile();
+
 
     while (true) {
         cout << "======================\n"
@@ -27,7 +33,8 @@ int main() {
              << "2. View Cart          \n"
              << "3. Checkout           \n"
              << "4. Login              \n"
-             << "5. Exit               \n"
+             << "5. Signup             \n"
+             << "6. Exit               \n"
              << "Enter your choice: ";
 
         int choice;
@@ -129,7 +136,12 @@ int main() {
                 break;
             }
             
-            case 5:
+            case 5: // Signup
+                Users.addUser();
+                Users.saveToFile();
+                break;
+            
+            case 6:
                 store.saveProductsToFile();
                 cout << "Thank you for shopping with us!\n";
                 return 0;
