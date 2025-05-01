@@ -28,14 +28,24 @@ int main() {
     while (true) {
         cout << "======================\n"
              << "   Store Front Menu   \n"
-             << "======================\n"
+             << "======================\n";
+        if (currentUser.isLogged()) {
+            cout << "Logged in as " << currentUser.getUsername() << endl;
+        }
+        cout << "0. Exit               \n"
              << "1. View Products      \n"
              << "2. View Cart          \n"
-             << "3. Checkout           \n"
-             << "4. Login              \n"
-             << "5. Signup             \n"
-             << "6. Exit               \n"
-             << "Enter your choice: ";
+             << "3. Checkout           \n";
+        if (!currentUser.isLogged()) {
+            cout << "4. Login              \n"
+                << "5. Signup             \n";
+        } else {
+            cout << "4. Logout             \n";
+            if (currentUser.isAdmin()) {
+                cout << "5. Access Admin Panel \n";
+            }
+        }
+        cout << "Enter your choice: ";
 
         int choice;
         // only accept ints as input
@@ -46,6 +56,12 @@ int main() {
         }
 
         switch (choice) {
+            case 0: // Exit
+                store.saveProductsToFile();
+                if (currentUser.isLogged()) currentUser.saveCartToFile(store.getCart());
+                cout << "Thank you for shopping with us!\n";
+                return 0;
+            
             case 1: { // View Products
                 store.displayProductCatalog();
                 cout << "Enter product ID to add to cart (or 0 to return): ";
@@ -82,26 +98,42 @@ int main() {
             
             case 3: // Checkout
                 store.processOrder();
+                if (currentUser.isLogged()) { currentUser.saveCartToFile(store.getCart()); }
                 break;
 
-            case 4: { // Login
-                    string password;
-                if (!admin.islogged()) {
-                    cout << "Input Admin password: ";
-                    cin >> password;
+            case 4: { // Login or Logout
+                if (!currentUser.isLogged()) { // Login
+                    Users.login(currentUser);
+                    currentUser.loadCartFromFile(store.getCart());
+                } else { // Logout
+                    currentUser.saveCartToFile(store.getCart());
+                    store.getCart().clearCart();
+                    currentUser.logout();
                 }
-                if (admin.login("Admin", password) || admin.islogged()) {
+                
+                break;
+            }
+            
+            case 5: // Signup
+                if (!currentUser.isLogged()) {
+                    Users.addUser(currentUser);
+                    currentUser.setLogged(true);
+                    currentUser.loadCartFromFile(store.getCart());
+                } else if (currentUser.isAdmin()) {
+                    // If user is admin, give them admin menu
+                    // If not, user can use normal program
                     int adminChoice;
                     do {
                         // Display Admin Menu
                         cout << "======================\n"
                             << "      Admin Menu      \n"
                             << "======================\n"
+                            << "0. Exit               \n"
                             << "1. View Products      \n"
                             << "2. Edit Product       \n"
                             << "3. Create Product     \n"
                             << "4. Delete Product     \n"
-                            << "5. Exit               \n"
+                            << "5. User data          \n"
                             << "Enter your choice: ";
 
                         // only accept ints as input
@@ -112,6 +144,8 @@ int main() {
                         }
 
                         switch (adminChoice) {
+                            case 0: // Exit
+                                break;
                             case 1: 
                                 cin.ignore(); // Remove whitespace so Admin::NewProduct() will work
                                 store.displayProductCatalog();
@@ -129,23 +163,13 @@ int main() {
                                 admin.deleteProduct();
                                 break;
                             case 5:
+                                Users.printUsers(currentUser);
                                 break;
                         }
-                    } while (adminChoice != 5);
+                    } while (adminChoice != 0);
                 }
                 break;
-            }
-            
-            case 5: // Signup
-                Users.addUser();
-                Users.saveToFile();
-                break;
-            
-            case 6:
-                store.saveProductsToFile();
-                cout << "Thank you for shopping with us!\n";
-                return 0;
-            
+
             default:
                 cout << "Invalid choice. Please try again.\n";
         }

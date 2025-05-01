@@ -35,6 +35,8 @@ void ShoppingCart::displayCart() const {
     cout << "Shopping Cart Contents:\n";
     cout << "-----------------------\n";
     for (const auto& item : items) {
+        // Debug
+        cout << item.first->getId() << " " << item.first->getDescription() << " ";
         cout << item.first->getName() << " (x" << item.second << ")"
              << " - $" << item.first->getPrice() * item.second << endl;
     }

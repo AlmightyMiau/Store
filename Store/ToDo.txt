@@ -1,6 +1,7 @@
- X  New accounts (save to file)
- X  Passwords file
- X  User.hpp
- X  File that holds all users, Passwords, and who is admin
-1 file each for every user
-user files hold cart from previous session
+ X  1 file each for every user
+ X  user files hold cart from previous session
+ X  View all users
+ X  Fix the menu numbers
+Does not properly load cart -- Its just a problem with the mapping of cart 
+    -> gonna change cart from map to parallel vectors?
+Delete users
