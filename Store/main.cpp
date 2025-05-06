@@ -2,7 +2,6 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <map>
 #include <limits>
 #include <iomanip>
 
@@ -72,18 +71,19 @@ int main() {
                 
                 Product* product = store.getProductById(productId);
                 if (product) {
-                    cout << "Enter quantity: ";
+                    cout << "Enter quantity (or 0 to cancel): ";
                     int quantity;
-                    while (!(cin >> quantity) || quantity <= 0) {
+                    while (!(cin >> quantity) || quantity < 0) {
                         cin.clear();
                         cin.ignore(numeric_limits<streamsize>::max(), '\n');
                         cout << "Invalid quantity. Please enter a positive number: ";
                     }
+                    if (quantity == 0) break;
                     
                     if (quantity > product->getQuantity()) {
                         cout << "Error: Not enough stock available.\n";
                     } else {
-                        store.getCart().addItem(product, quantity);
+                        store.getCart().addItem(*product, quantity);
                         cout << "Added " << quantity << " of " << product->getName() << " to cart.\n";
                     }
                 } else {

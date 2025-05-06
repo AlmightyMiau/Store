@@ -1,7 +1,6 @@
- X  1 file each for every user
- X  user files hold cart from previous session
- X  View all users
- X  Fix the menu numbers
-Does not properly load cart -- Its just a problem with the mapping of cart 
-    -> gonna change cart from map to parallel vectors?
+ X Does not properly load cart -- Its just a problem with the mapping of cart 
+ X    -> gonna change cart from map to parallel vectors?
+ X Replace checkout's "Select Payment method" with "continue/cancel"
+ X Checkout didn't change the product amounts
+ X User's save and load cart functions still had debug messages
 Delete users

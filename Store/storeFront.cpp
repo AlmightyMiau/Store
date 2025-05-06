@@ -1,10 +1,13 @@
 #include "storeFront.hpp"
 
 void StoreFront::updateInventory() {
-    for (const auto& item : currentCart.getItems()) {
-        Product* product = item.first;
-        int quantity = item.second;
-        product->setQuantity(product->getQuantity() - quantity);
+    vector<Product>* products = currentCart.getItems();
+    vector<int>* quantities = currentCart.getItemQuantities();
+    for (int i = 0; i < products->size(); i++) {
+        // set the quantity, of the product given by products[i], to the current quantity there, minus the quantity given 
+        // the [0]'s are used to select the item instead of the allocator (??? v silly)
+        Product* product = getProductById(products[i][0].getId());
+        product->setQuantity(products[i][0].getQuantity() - quantities[i][0]);
     }
 }
 
@@ -74,27 +77,24 @@ void StoreFront::processOrder() {
     
     if (total > 0) {
         cout << "Proceeding to checkout...\n";
-        processPayment(total);
+        cout << "Total amount: $" << fixed << setprecision(2) << total << endl;
+        
+        int confirmChoice;
+        cout << "Confirm purchase:\n"
+            << "1. Confirm\n"
+            << "2. Cancel\n"
+            << "Choice: ";
+        while (!(cin >> confirmChoice) || (confirmChoice < 1 || confirmChoice > 2)) {
+            cin.clear();
+            cin.ignore();
+            cout << "Invalid choice. Please enter 1 or 2: ";
+        }
+        if (confirmChoice == 2) return; // Cancel order
+        
+        
         updateInventory();
         saveProductsToFile();
         currentCart.clearCart();
+        cout << "Payment processed successfully!\n\n";
     }
-}
-
-void StoreFront::processPayment(float amount) {
-    cout << "Total amount: $" << fixed << setprecision(2) << amount << endl;
-    
-    int paymentChoice;
-    cout << "Select payment method:\n"
-         << "1. Credit Card\n"
-         << "2. Debit Card\n"
-         << "Choice: ";
-    
-    while (!(cin >> paymentChoice) || (paymentChoice < 1 || paymentChoice > 2)) {
-        cin.clear();
-        cin.ignore();
-        cout << "Invalid choice. Please enter 1 or 2: ";
-    }
-    
-    cout << "Payment processed successfully!\n\n";
 }

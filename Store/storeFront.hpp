@@ -39,8 +39,6 @@ class StoreFront {
     
         void processOrder();
     
-        void processPayment(float amount);
-    
         ShoppingCart& getCart() { return currentCart; }
 
 };

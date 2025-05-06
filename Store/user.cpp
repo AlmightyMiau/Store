@@ -7,50 +7,42 @@ void User::saveCartToFile(ShoppingCart& cart) const {
     std::ofstream file((username + ".dat"), std::ios::binary);
     int strLen;
 
-    const map<Product*, int>& items = cart.getItems();
+    vector<Product> products = *cart.getItems();
+    vector<int> quantities = *cart.getItemQuantities();
 
     // Write how many items there are
     // Size
-    int size = items.size();// Number of products
+    int size = products.size();// Number of products
     file.write(reinterpret_cast<const char*>(&size),sizeof(size));
-    cout << "size " << size << endl;
     
     // cycle through all of the pairs
-    for (const auto& pair : items) {
+    for (int i = 0; i < products.size(); i++) {
         // ID, name, description, price, quant of product, quant in cart
         // ID
-        int id = pair.first->getId();
+        int id = products[i].getId();
         file.write(reinterpret_cast<const char*>(&id),sizeof(id));
-        cout << "ID " << id << endl;
 
         // Name
-        strLen = pair.first->getName().size();
+        strLen = products[i].getName().size();
         file.write(reinterpret_cast<const char*>(&strLen), sizeof(strLen));
-        file.write(pair.first->getName().c_str(),strLen);
-        cout << "strlen " << strLen << endl;
-        cout << "Name " << pair.first->getName() << endl;
+        file.write(products[i].getName().c_str(),strLen);
         
         // Description
-        strLen = pair.first->getDescription().size();
+        strLen = products[i].getDescription().size();
         file.write(reinterpret_cast<const char*>(&strLen), sizeof(strLen));
-        file.write(pair.first->getDescription().c_str(),strLen);
-        cout << "strlen " << strLen << endl;
-        cout << "Desc " << pair.first->getDescription() << endl;
+        file.write(products[i].getDescription().c_str(),strLen);
         
         // Price
-        float price = pair.first->getPrice();
+        float price = products[i].getPrice();
         file.write(reinterpret_cast<const char*>(&price),sizeof(price));
-        cout << "Price " << price << endl;
         
         // Quant
-        int quant = pair.first->getQuantity();
+        int quant = products[i].getQuantity();
         file.write(reinterpret_cast<const char*>(&quant),sizeof(quant));
-        cout << "Quant " << quant << endl;
 
         // Quantity
-        int quantity = pair.second;
+        int quantity = quantities[i];
         file.write(reinterpret_cast<const char*>(&quantity),sizeof(quantity));
-        cout << "Quantity " << quantity << endl;
     }
 };
 
@@ -66,7 +58,6 @@ void User::loadCartFromFile(ShoppingCart& cart) {
     // Read number of items
     int size;
     file.read(reinterpret_cast<char*>(&size), sizeof(size));
-    cout << "size " << size << endl;
 
     if (size == 0) return;
 
@@ -74,7 +65,6 @@ void User::loadCartFromFile(ShoppingCart& cart) {
         // Product ID
         int id;
         file.read(reinterpret_cast<char*>(&id), sizeof(id));
-        cout << "ID " << id << endl;
 
         // Product Name
         string name;
@@ -84,8 +74,6 @@ void User::loadCartFromFile(ShoppingCart& cart) {
         temp[strLen] = '\0';
         name = temp;
         delete [] temp;
-        cout << "strlen " << strLen << endl;
-        cout << "Name " << name << endl;
 
         // Product Description
         string desc;
@@ -95,33 +83,22 @@ void User::loadCartFromFile(ShoppingCart& cart) {
         temp[strLen] = '\0';
         desc = temp;
         delete [] temp;
-        cout << "strlen " << strLen << endl;
-        cout << "Desc " << desc << endl;
 
         // Product Price
         float price;
         file.read(reinterpret_cast<char*>(&price), sizeof(price));
-        cout << "Price " << price << endl;
 
         // Product Quantity
         int quant;
         file.read(reinterpret_cast<char*>(&quant), sizeof(quant));
-        cout << "Quant " << quant << endl;
 
         Product product(id,name,desc,price,quant);
 
         // Quantity in cart
         int quantity;
         file.read(reinterpret_cast<char*>(&quantity), sizeof(quantity));
-        cout << "Quantity " << quantity << endl;
 
-        cart.addItem(&product, quantity);
-
-        cout << "ID " << product.getId() << endl;
-        cout << "name " << product.getName() << endl;
-        cout << "desc " << product.getDescription() << endl;
-        cout << "price " << product.getPrice() << endl;
-        cout << "quantity " << product.getQuantity() << endl;
+        cart.addItem(product, quantity);
     }
     file.close();
 };
