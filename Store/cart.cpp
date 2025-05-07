@@ -20,7 +20,7 @@ void ShoppingCart::addItem(Product product, int quantity) {
 }
 
 // Remove item from cart
-void ShoppingCart::removeItem(Product* product, int quantity) {
+void ShoppingCart::removeItem(Product* product) {
     // find where the item is in the vectors
     int index = findItem(product);
     

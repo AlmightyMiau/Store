@@ -5,7 +5,7 @@ void StoreFront::updateInventory() {
     vector<int>* quantities = currentCart.getItemQuantities();
     for (int i = 0; i < products->size(); i++) {
         // set the quantity, of the product given by products[i], to the current quantity there, minus the quantity given 
-        // the [0]'s are used to select the item instead of the allocator (??? v silly)
+        // the [0]'s are used to select the item instead of the allocator (??? very silly)
         Product* product = getProductById(products[i][0].getId());
         product->setQuantity(products[i][0].getQuantity() - quantities[i][0]);
     }
