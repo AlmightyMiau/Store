@@ -1,6 +1,3 @@
- X Does not properly load cart -- Its just a problem with the mapping of cart 
- X    -> gonna change cart from map to parallel vectors?
- X Replace checkout's "Select Payment method" with "continue/cancel"
- X Checkout didn't change the product amounts
- X User's save and load cart functions still had debug messages
-Delete users
+ X Delete users
+    --> can't delete a file if it is open :( idk how to fix
+ X It shouldn't display the cart when you login

@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <filesystem> // remove() a file as part of deleting users
 
 // Save users to users.dat file
 void UserManagement::saveToFile() const{
@@ -26,7 +27,7 @@ void UserManagement::saveToFile() const{
         // Is bool
         bool admin = users[i].isAdmin();
         file.write(reinterpret_cast<const char*>(&admin),sizeof(admin));
-}
+    }
     file.close();
 }
 
@@ -123,6 +124,49 @@ void UserManagement::addUser(User& newUser) {
     return;
 }
 
+// Delete a user specified by index of user
+void UserManagement::deleteUser(int index) {
+    // Find that given user exists
+    if (index != userExists(users[index].getUsername())) { // If not found, display error message and end function
+        cout << "User "
+             << users[index].getUsername()
+             << " not found in list"
+             << endl;
+        return;
+    }
+
+    string username = users[index].getUsername();
+
+    // Ask for confirmation to delete user
+    char verify;
+    cout << "Are you sure you want to delete "
+         << username
+         << "'s account? (y/n) ";
+    cin >> verify;
+
+    if (verify == 'y') {
+        cout << "\nDeleting user '"
+             << username
+             << "'"
+             << endl;
+        // Delete user file
+        string filename = username + ".dat";
+        cout << "Deleting file " << filename << endl;
+        // Won't work if the file is currently open by something !!!!
+        cout << 
+            ((remove(reinterpret_cast<char*>(&filename)) == 0) 
+            ? "Successfully deleted file" 
+            : "\nERROR: Failed to delete file\n")
+        << endl;
+        // Erases given user from users vector
+        users.erase(users.begin() + index);
+        saveToFile();
+    } else {
+        cout << "Canceling action" << endl;
+    }
+
+}
+
 bool UserManagement::login(User& newUser) {
     string username;
     string password;
@@ -161,6 +205,8 @@ bool UserManagement::login(User& newUser) {
     return false;
 }
 
+// Returns index of given user in users vector
+// Returns -1 if not found
 int UserManagement::userExists(string username) {
     int index = -1;
     // Search array for username
@@ -174,11 +220,12 @@ int UserManagement::userExists(string username) {
 }
 
 void UserManagement::printUsers(User& currentUser) {
-    for (User user : users) {
-        cout << "Username:     " << user.getUsername() << '\n'
-             << "Password:     " << user.getPassword() << '\n'
-             << "Admin:        " << (user.isAdmin() ? "true" : "false" ) << '\n'
-             << "Is Logged in: "  << ((currentUser.getUsername() == user.getUsername()) 
+    for (int i = 0; i < users.size(); i++) {
+        cout << "User #" << i << '\n'
+             << "Username:     " << users[i].getUsername() << '\n'
+             << "Password:     " << users[i].getPassword() << '\n'
+             << "Admin:        " << (users[i].isAdmin() ? "true" : "false" ) << '\n'
+             << "Is Logged in: "  << ((currentUser.getUsername() == users[i].getUsername()) 
                                       ? (currentUser.isLogged() ? "true" : "false" ) 
                                       : "false") << '\n'
              << endl;

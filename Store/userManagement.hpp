@@ -13,6 +13,7 @@ class UserManagement{
         vector<User> users;
     public:
         void addUser(User& newUser); // returns a newly created user object
+        void deleteUser(int index); // removes a user from users
         bool login(User& newUser); // returns an already existing user object
         int userExists(string username); // Checks if username is in users[], returns index or -1
         void printUsers(User& currentUser); // Prints all user data, if user is admin

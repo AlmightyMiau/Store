@@ -110,11 +110,10 @@ int main() {
                     store.getCart().clearCart();
                     currentUser.logout();
                 }
-                
                 break;
             }
             
-            case 5: // Signup
+            case 5: // Signup or Access admin panel
                 if (!currentUser.isLogged()) {
                     Users.addUser(currentUser);
                     currentUser.setLogged(true);
@@ -134,6 +133,7 @@ int main() {
                             << "3. Create Product     \n"
                             << "4. Delete Product     \n"
                             << "5. User data          \n"
+                            << "6. Delete User        \n"
                             << "Enter your choice: ";
 
                         // only accept ints as input
@@ -143,6 +143,8 @@ int main() {
                             cout << "Invalid input. Please enter a number: ";
                         }
 
+                        // variables used in here
+                        int index; // index of user to delete
                         switch (adminChoice) {
                             case 0: // Exit
                                 break;
@@ -164,6 +166,12 @@ int main() {
                                 break;
                             case 5:
                                 Users.printUsers(currentUser);
+                                break;
+                            case 6: // Delete a user
+                                Users.printUsers(currentUser);
+                                cout << "Select index of user to delete: ";
+                                cin >> index;
+                                Users.deleteUser(index);
                                 break;
                         }
                     } while (adminChoice != 0);

@@ -16,7 +16,6 @@ void ShoppingCart::addItem(Product product, int quantity) {
     } else { // Not in cart yet, add new product and add quantity 
         products.push_back(product);
         productCounts.push_back(quantity);
-        displayCart(); // why work here but not after????
     }
 }
 

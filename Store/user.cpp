@@ -44,6 +44,7 @@ void User::saveCartToFile(ShoppingCart& cart) const {
         int quantity = quantities[i];
         file.write(reinterpret_cast<const char*>(&quantity),sizeof(quantity));
     }
+    file.close();
 };
 
 void User::loadCartFromFile(ShoppingCart& cart) {
