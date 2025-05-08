@@ -25,6 +25,7 @@ int main() {
 
 
     while (true) {
+        // Main Menu, accomodating various possibilities
         cout << "======================\n"
              << "   Store Front Menu   \n"
              << "======================\n";

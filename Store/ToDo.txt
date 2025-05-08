@@ -1,3 +1,1 @@
- X Delete users
-    --> can't delete a file if it is open :( idk how to fix
- X It shouldn't display the cart when you login
+ X Document all of the classes

@@ -2,39 +2,6 @@
 
 using namespace std;
 
-bool Admin::login(const string user, const string password) {
-    if (!isAdmin) {
-        // REMEMBER TO GET USERS FROM A FILE LATER
-        vector<string> usernames = {
-            "Admin"
-        };
-        bool found = false;
-        int id = 0;
-
-        // Find username in array
-        for (int i = 0; i < usernames.size(); i++) {
-            if (user == usernames[i]) {
-                id = i;
-                found = true;
-                break;
-            }
-        }
-        // Correct username
-        if (!found) {
-            cout << "Failed to login: username not found" << endl;
-            return false;
-        }
-        // Compare password REMEMBER TO GET PASSWORDS FROM A FILE LATER
-        if (password == "admin") {
-            isAdmin = true;
-            return true;
-        } else {
-            cout << "Failed to login: incorrect password" << endl;
-            return false;
-        }
-    } else { return true; }
-};
-
 void Admin::newProduct() { // Create new product
     if (!isAdmin) { // Only accessible if user is logged in as admin
         cout << "ERROR: User is not admin" << endl;

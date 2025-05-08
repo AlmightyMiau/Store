@@ -1,8 +1,9 @@
 #ifndef Cart_HPP
 #define Cart_HPP
 
-#include "product.hpp"
 #include <vector>
+
+#include "product.hpp"
 
 /// @brief Cart holding products with amounts
 /// @see Product
