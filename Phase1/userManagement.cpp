@@ -36,7 +36,7 @@ void UserManagement::loadFromFile() {
     std::ifstream file((filename), std::ios::binary);
     if (!file.good()) {
         // It should create an admin account
-        cout << "file " << filename << ".dat is empty or does not exist" << endl;
+        cout << "file " << filename << " is empty or does not exist" << endl;
         return;
     }
     int strLen;
