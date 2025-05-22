@@ -1,22 +1,21 @@
 <!-- 
-  First page should start a session 
-  some "private" pages should redirect to index if not in a session (cart, checkout)
   pages needed are:
-    -> menu, showing all products, and options including View Cart, login/out, signup
+    -> menu, showing all products, make the products look good
     cart, showing items in cart with options including checkout, remove an item
     login, with fields for username/password
     signup, with fields for username/password
     checkout, with confirmation of cart total and whatnot
   
   Completed: 
-    First page should start a session 
-    some "private" pages should redirect to index if not in a session (cart, checkout)
-      menu options including View Cart, login/out, signup
+    First page builds the database and table
+      menu, showing all products
 -->
 <?php
     session_start();
     require_once 'User.php';
-    require_once 'displayProducts.php';
+    require_once 'products.php';
+    initProducts(); // Make sure the database and table is set up
+    addProduct("name:3", "desc:3", 5.00, 5); // This adds a product to the table (only adds one bc name has to be unique)
 
     $logged = false;
     if (isset($_SESSION['user'])) {
