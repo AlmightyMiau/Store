@@ -57,29 +57,114 @@ function displayProducts() {
     // Create connection
     $conn = new mysqli($servername, $username);
 
-    // Check connection
-    if ($conn->connect_error) {
-      die("Connection failed: " . $conn->connect_error);
-    }
-
     $sql = "SELECT id, name, description, price, quantity FROM Store.products";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
-      // output data of each row
-      while($row = $result->fetch_assoc()) {
-        echo '<div class="product">
-                <p> ID: ' . $row["id"] . '</p>
-                <p> Name: ' . $row["name"] . '</p>
-                <p> Description: ' . $row["description"] . '</p>
-                <p> Price: ' . $row["price"] . '</p>
-                <p> Quantity: ' . $row["quantity"] . '</p>
-              </div>';
-      }
+        // output data of each row
+        echo '<div id="product-window">';
+        while($row = $result->fetch_assoc()) {
+            echo '<div class="product">
+                    <p> Name: ' . $row["name"] . '</p>
+                    <p> Description: ' . $row["description"] . '</p>
+                    <p> Price: $' . $row["price"] . '</p>
+                    <p> Quantity: ' . $row["quantity"] . '</p>
+                    <form method="post"> <input type="submit" name="' . $row["id"] . '" value="Add to Cart"></input> </form>
+                </div>';
+        }
+        echo '</div>';
       
     } else {
       echo "0 products in inventory :(";
     }
 }
 
+// Add any new items to cart (reset POST values)
+function addItemsToCart() {
+    $servername = "localhost";
+    $username = "root";
+
+    // Create connection
+    $conn = new mysqli($servername, $username);
+
+    $sql = "SELECT id, name FROM Store.products";
+    $result = $conn->query($sql);
+
+    // check if any items are in post (look through post for all products)
+    if ($result->num_rows > 0) {
+        // Parse each row
+        while($row = $result->fetch_assoc()) {
+            if (isset($_POST[$row["id"]])) {
+                if (isset($_SESSION["cart"][$row["name"]])) {
+                    $_SESSION["cart"][$row["name"]]++;
+                } else {
+                    $_SESSION["cart"][$row["name"]] = 1;
+                }
+            }
+        }
+    }
+    // for any in post, add them to session['cart'] and remove them from post
+}
+
+function displayItemsInCart() {
+    $servername = "localhost";
+    $username = "root";
+
+    // Create connection
+    $conn = new mysqli($servername, $username);
+
+    $sql = "SELECT id, name, description, price, quantity FROM Store.products";
+    $result = $conn->query($sql);
+
+    // check all products to see if any are in cart
+    // for any that are, display them
+    if ($result->num_rows > 0) {
+        // Parse each row
+        $total = 0;
+        echo '<div id="product-window">';
+        while($row = $result->fetch_assoc()) {
+            if (isset($_SESSION["cart"][$row["name"]])) {
+                $total += $_SESSION["cart"][$row["name"]] * $row["price"];
+                echo '<div class="product">
+                    <p> Name: ' . $row["name"] . '</p>
+                    <p> Description: ' . $row["description"] . '</p>
+                    <p> Price: $' . $row["price"] . '</p>
+                    <p> Amount in Cart: ' . $_SESSION["cart"][$row["name"]] . '</p>
+                    <p> Total: $' . $_SESSION["cart"][$row["name"]] * $row["price"] . '</p>
+                    <form method="post"> <input type="submit" name="' . $row["id"] . '" value="Remove item (-1)"></input> </form>
+                </div>';
+            }
+        }
+        echo '<p> Total: $' . $total . '</p>
+          </div>
+          <a href="checkout.php"> Checkout </a>
+          ';
+    }
+}
+
+// Add any new items to cart (reset POST values)
+function removeItemsToCart() {
+    $servername = "localhost";
+    $username = "root";
+
+    // Create connection
+    $conn = new mysqli($servername, $username);
+
+    $sql = "SELECT id, name FROM Store.products";
+    $result = $conn->query($sql);
+
+    // check if any items are in post (look through post for all products)
+    if ($result->num_rows > 0) {
+        // Parse each row
+        while($row = $result->fetch_assoc()) {
+            if (isset($_POST[$row["id"]])) {
+                if ($_SESSION["cart"][$row["name"]] == 1) {
+                    unset($_SESSION["cart"][$row["name"]]);
+                } else {
+                    $_SESSION["cart"][$row["name"]]--;
+                }
+            }
+        }
+    }
+}
 ?>

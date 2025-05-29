@@ -1,27 +1,17 @@
-<!-- 
-  pages needed are:
-    -> menu, showing all products, make the products look good
-    cart, showing items in cart with options including checkout, remove an item
-    login, with fields for username/password
-    signup, with fields for username/password
-    checkout, with confirmation of cart total and whatnot
-  
-  Completed: 
-    First page builds the database and table
-      menu, showing all products
--->
 <?php
     session_start();
     require_once 'User.php';
     require_once 'products.php';
-    initProducts(); // Make sure the database and table is set up
-    addProduct("This greta produtc ^-^", ":3 >w< .-.", 1.12, 17); // This adds a product to the table (only adds one bc name has to be unique)
 
     $logged = false;
     if (isset($_SESSION['user'])) {
         $logged = true;
         $user = User::fromArray($_SESSION['user']);
+    } else {
+        header("Location: index.php");
     }
+
+    removeItemsToCart();
 
 ?>
 <!DOCTYPE html>
@@ -36,7 +26,6 @@
             <div id="logo"><a href="index.php">Store</a></div>
             <div id="nav">
                 <?php 
-                    echo '<a href="viewCart.php">Cart</a>';
                     if (!$logged) {
                         echo '<a href="login.php">Login</a>';
                         echo '<a href="register.php">Sign Up</a>';
@@ -47,8 +36,7 @@
             </div>
             <?php if ($logged) {echo "<h3> Welcome, " . htmlspecialchars($user->username) . '! </h3>';} ?> 
         </header>
-        <!-- PUT ALL OF THE PRODUCTS HERE, WITH "ADD TO CART BUTTONS" -->
-        <?php displayProducts(); 
-        addItemsToCart(); // Add any new items to cart ?>
+        <!-- Show items in cart with amounts of items -->
+        <?php displayItemsInCart(); ?>
     </body>
 </html>

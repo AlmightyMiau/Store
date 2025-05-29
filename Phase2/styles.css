@@ -1,10 +1,18 @@
 :root {
     --background: #251a2d;
+    --item-background: #573e69;
     --content-spacing: 5px;
     --text-color: white;
     --accent-1: #6eebff;
     --border: 2px solid rgb(34, 34, 34);
     --img-size: 150px;
+}
+
+header div {
+    display: inline-block;
+}
+header h3 {
+    margin: 5px;
 }
 
 body {
@@ -20,4 +28,20 @@ a {
 
 #nav {
     float: right;
+}
+
+#product-window {
+    border: 0px solid black;
+}
+.product {
+    display: inline-block;
+    width: 20%;
+    height: 20%;
+    border: 2px solid grey;
+    background-color: var(--item-background);
+    margin: 10px;
+}
+.product p, .product input, .product a {
+    margin-left: 10%;
+    margin-bottom: 5%;
 }
