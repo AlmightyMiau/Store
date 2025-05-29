@@ -41,7 +41,7 @@ a {
     background-color: var(--item-background);
     margin: 10px;
 }
-.product p, .product input, .product a {
+.product p, .product input, .product a, .product button {
     margin-left: 10%;
     margin-bottom: 5%;
 }

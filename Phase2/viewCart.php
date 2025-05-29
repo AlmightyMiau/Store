@@ -19,6 +19,7 @@
     <head>
         <link href="styles.css" rel="stylesheet">
         <title>Menu</title>
+        <script src="cart.js"></script>
     </head>
     <body>
         <!-- Top bar header -->

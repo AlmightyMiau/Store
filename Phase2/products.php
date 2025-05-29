@@ -69,7 +69,7 @@ function displayProducts() {
                     <p> Description: ' . $row["description"] . '</p>
                     <p> Price: $' . $row["price"] . '</p>
                     <p> Quantity: ' . $row["quantity"] . '</p>
-                    <form method="post"> <input type="submit" name="' . $row["id"] . '" value="Add to Cart"></input> </form>
+                    <button onclick="addItemToCart(`' . $row["name"] . '`)">Add To Cart</button>
                 </div>';
         }
         echo '</div>';
@@ -77,33 +77,6 @@ function displayProducts() {
     } else {
       echo "0 products in inventory :(";
     }
-}
-
-// Add any new items to cart (reset POST values)
-function addItemsToCart() {
-    $servername = "localhost";
-    $username = "root";
-
-    // Create connection
-    $conn = new mysqli($servername, $username);
-
-    $sql = "SELECT id, name FROM Store.products";
-    $result = $conn->query($sql);
-
-    // check if any items are in post (look through post for all products)
-    if ($result->num_rows > 0) {
-        // Parse each row
-        while($row = $result->fetch_assoc()) {
-            if (isset($_POST[$row["id"]])) {
-                if (isset($_SESSION["cart"][$row["name"]])) {
-                    $_SESSION["cart"][$row["name"]]++;
-                } else {
-                    $_SESSION["cart"][$row["name"]] = 1;
-                }
-            }
-        }
-    }
-    // for any in post, add them to session['cart'] and remove them from post
 }
 
 function displayItemsInCart() {
@@ -123,15 +96,16 @@ function displayItemsInCart() {
         $total = 0;
         echo '<div id="product-window">';
         while($row = $result->fetch_assoc()) {
-            if (isset($_SESSION["cart"][$row["name"]])) {
-                $total += $_SESSION["cart"][$row["name"]] * $row["price"];
+            if (isset($_COOKIE[escape($row["name"])])) {
+                $total += $_COOKIE[escape($row["name"])] * $row["price"];
                 echo '<div class="product">
                     <p> Name: ' . $row["name"] . '</p>
                     <p> Description: ' . $row["description"] . '</p>
                     <p> Price: $' . $row["price"] . '</p>
-                    <p> Amount in Cart: ' . $_SESSION["cart"][$row["name"]] . '</p>
-                    <p> Total: $' . $_SESSION["cart"][$row["name"]] * $row["price"] . '</p>
-                    <form method="post"> <input type="submit" name="' . $row["id"] . '" value="Remove item (-1)"></input> </form>
+                    <p> Amount in Cart: ' . $_COOKIE[escape($row["name"])] . '</p>
+                    <p> Total: $' . $_COOKIE[escape($row["name"])] * $row["price"] . '</p>
+                    <button onclick="addItemToCart(`' . $row["name"] . '`)">+1</button>
+                    <button onclick="removeItemFromCart(`' . $row["name"] . '`)">-1</button>
                 </div>';
             }
         }
@@ -166,5 +140,14 @@ function removeItemsToCart() {
             }
         }
     }
+}
+
+function escape($string) {
+    for ($i = 0; $i < strlen($string); $i++) {
+        if ($string[$i] == ' ') {
+            $string[$i] = '_';
+        }
+    }
+    return '"' . $string . '"';
 }
 ?>

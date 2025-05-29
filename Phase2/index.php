@@ -15,7 +15,7 @@
     require_once 'User.php';
     require_once 'products.php';
     initProducts(); // Make sure the database and table is set up
-    addProduct("This greta produtc ^-^", ":3 >w< .-.", 1.12, 17); // This adds a product to the table (only adds one bc name has to be unique)
+    addProduct("name :3", "desc :3", 42.06, 2); // This adds a product to the table (only adds one bc name has to be unique)
 
     $logged = false;
     if (isset($_SESSION['user'])) {
@@ -29,6 +29,7 @@
     <head>
         <link href="styles.css" rel="stylesheet">
         <title>Menu</title>
+        <script src="cart.js"></script>
     </head>
     <body>
         <!-- Top bar header -->
@@ -48,7 +49,6 @@
             <?php if ($logged) {echo "<h3> Welcome, " . htmlspecialchars($user->username) . '! </h3>';} ?> 
         </header>
         <!-- PUT ALL OF THE PRODUCTS HERE, WITH "ADD TO CART BUTTONS" -->
-        <?php displayProducts(); 
-        addItemsToCart(); // Add any new items to cart ?>
+        <?php displayProducts(); ?>
     </body>
 </html>
