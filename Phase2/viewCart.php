@@ -10,15 +10,12 @@
     } else {
         header("Location: index.php");
     }
-
-    removeItemsToCart();
-
 ?>
 <!DOCTYPE html>
 <html>
     <head>
         <link href="styles.css" rel="stylesheet">
-        <title>Menu</title>
+        <title>Cart</title>
         <script src="cart.js"></script>
     </head>
     <body>
@@ -27,6 +24,7 @@
             <div id="logo"><a href="index.php">Store</a></div>
             <div id="nav">
                 <?php 
+                    echo '<a href="viewCart.php">Cart</a>';
                     if (!$logged) {
                         echo '<a href="login.php">Login</a>';
                         echo '<a href="register.php">Sign Up</a>';

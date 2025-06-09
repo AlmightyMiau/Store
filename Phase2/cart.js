@@ -1,4 +1,5 @@
 function addItemToCart(name, quantity = 0) {
+    name = name.replace(/ /g,"_"); // replace spaces with underscores
     // If cookie is already there AND passed quantity is 0, do ++
     const cookieValue = document.cookie
         .split("; ")
@@ -17,6 +18,7 @@ function addItemToCart(name, quantity = 0) {
 }
 
 function removeItemFromCart(name, quantity = 0) {
+    name = name.replace(/ /g,"_"); // replace spaces with underscores
     // If cookie is already there AND passed quantity is 0, do ++
     const cookieValue = document.cookie
         .split("; ")
@@ -28,7 +30,11 @@ function removeItemFromCart(name, quantity = 0) {
         }
         quantity--;
     }
-    newCookie = '"' + name + '"=' + quantity;
+    expire = "";
+    if (quantity == 0) { // 
+        expire = '; Max-Age=-99999';
+    }
+    newCookie = '"' + name + '"=' + quantity + expire;
     document.cookie = newCookie;
     location.reload();
     return document.cookie;
