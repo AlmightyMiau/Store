@@ -20,6 +20,20 @@
             addProduct($name, $desc, $price, $quantity);
         } else if (isset($_POST['DeleteItem'])) {
             deleteProduct($_POST['DeleteItem']);
+        } else if (isset($_POST["createUsername"])) {
+            $manager = new UserManagement();
+            $username = trim($_POST['createUsername'] ?? '');
+            $password = trim($_POST['createPassword'] ?? '');
+
+            if ($username && $password) {
+                $newUser = new User($username, $password);
+                $manager->saveUser($newUser);
+            } else {
+                $message = "Please fill in all fields.";
+            }
+        } else if (isset($_POST['DeleteUser'])) {
+            $manager = new UserManagement();
+            $manager->deleteUser($_POST['DeleteUser']);
         }
     }
 ?>
@@ -54,14 +68,15 @@
             <span id="Products">
                 <button id="viewProducts" onclick="ViewProducts()">Products</button>
                 <ul id="productOptions" style="display: none;">
-                    <li id="createProduct"><button onclick="CreateProducts()">Create</button></li>
+                    <li id="createProduct"><button onclick="CreateProducts()">Create</button>
                         <form id="createProductForm" method="POST" style="padding: 5px; width: 30%; display: none;">
                             Name: <input name="createProductName"><br>
                             Description: <input name="desc"><br>
                             Price: <input name="price"><br>
                             Quantity: <input name="quantity"><br>
-                            <button id="submitBtn" type="submit">Submit</button>
+                            <button id="submitProductBtn" type="submit">Submit</button>
                         </form>
+                    </li>
                     <!-- <li id="editProduct"><button onclick="EditProducts()">Edit</button></li> -->
                     <li id="deleteProduct"><button onclick="DeleteProducts()">Delete</button></li>
                     <div id="deleteProductHelper" style="display: none;"></div>
@@ -71,9 +86,17 @@
             <span id="Users">
                 <button id="viewUsers" onclick="ViewUsers()">Users</button>
                 <ul id="userOptions" style="display: none;">
-                    <li><button id="createUser" onclick="CreateUser()">Create</button></li>
+                    <li id="createUser">
+                        <button onclick="CreateUser()">Create</button>
+                        <form id="createUserForm" method="POST" style="display: none;">
+                            Username: <input name="createUsername"><br>
+                            Password: <input name="createPassword"><br>
+                            <button id="submitUserBtn" type="submit">Register</button>
+                        </form>
+                    </li>
                     <!-- <li><button id="editUser" onclick="EditUser()">Edit</button></li> -->
-                    <li><button id="deleteUser" onclick="DeleteUser()">Delete</button></li>
+                    <li id="deleteUser"><button onclick="DeleteUser()">Delete</button></li>
+                    <div id="deleteUserHelper" style="display: none;"></div>
                 </ul>
                 <?php 
                     $manage = new UserManagement;

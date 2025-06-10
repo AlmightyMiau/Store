@@ -29,6 +29,14 @@ class UserManagement {
         return User::fromArray($data);
     }
 
+    public function deleteUser($username) {
+        $path = $this->folder . "/" . $username . ".json";
+        if (!file_exists($path)) return null;
+
+        // delete file
+        unlink($path);
+    }
+
     public function displayUsers() {
         $users = scandir("users");
         if (!$users) {
@@ -46,8 +54,11 @@ class UserManagement {
                 echo '<div class="user">
                     <p> Username: ' . $user->username . '</p>
                     <p> Password: ' . $user->password . '</p>
-                    <p> Admin: ' . ($user->admin == true ? 'true' : 'false') . '</p>
-                </div>';
+                    <p> Admin: ' . ($user->admin == true ? 'true' : 'false') . '</p>';
+                if ($user->username != 'admin') { 
+                    echo '<form method="POST"><button class="userDeleteBtn" name="DeleteUser" value="' . $user->username . '" type="submit" style="display: none;">Delete</button></form>';
+                }
+                echo '</div>';
             }
         }
         echo '</div>';

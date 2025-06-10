@@ -55,6 +55,6 @@ a {
     margin-bottom: 5%;
 }
 
-.productDeleteBtn {
+.productDeleteBtn, .userDeleteBtn {
     color: rgb(180, 14, 14);
 }
