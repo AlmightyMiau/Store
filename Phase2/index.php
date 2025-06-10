@@ -37,6 +37,9 @@
             <div id="logo"><a href="index.php">Store</a></div>
             <div id="nav">
                 <?php 
+                    if ($user->admin) {
+                        echo '<a href="admin.php">Admin</a>';
+                    }
                     echo '<a href="viewCart.php">Cart</a>';
                     if (!$logged) {
                         echo '<a href="login.php">Login</a>';

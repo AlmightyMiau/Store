@@ -30,18 +30,31 @@ a {
     float: right;
 }
 
-#product-window {
+#product-window, #user-window {
     border: 0px solid black;
 }
-.product {
+.product, .user {
     display: inline-block;
-    width: 20%;
     height: 20%;
     border: 2px solid grey;
     background-color: var(--item-background);
     margin: 10px;
 }
+.product {
+    width: 18%;
+}
+.user {
+    width: 15%;
+}
 .product p, .product input, .product a, .product button {
     margin-left: 10%;
     margin-bottom: 5%;
+}
+.user p, .user input, .user a, .user button {
+    margin-left: 10%;
+    margin-bottom: 5%;
+}
+
+.productDeleteBtn {
+    color: rgb(180, 14, 14);
 }

@@ -2,15 +2,11 @@
 class User {
     public string $username;
     public string $password;
-    public int $win;
-    public int $loss;
     public bool $admin;
 
-    public function __construct($username, $password, $win = 0, $loss = 0, $admin = false) {
+    public function __construct($username, $password, $admin = false) {
         $this->username = $username;
         $this->password = $password;
-        $this->win = $win;
-        $this->loss = $loss;
         $this->admin = $admin;
     }
 
@@ -22,8 +18,6 @@ class User {
         return new User(
             $data['username'],
             $data['password'],
-            $data['win'],
-            $data['loss'],
             $data['admin']
         );
     }

@@ -11,7 +11,7 @@ class UserManagement {
 
         $adminPath = $this->folder . "/admin.json";
         if (!file_exists($adminPath)) {
-            $admin = new User("admin", "admin123", 100, 20, true);
+            $admin = new User("admin", "Admin!1", true);
             $this->saveUser($admin);
         }
     }
@@ -27,6 +27,30 @@ class UserManagement {
 
         $data = json_decode(file_get_contents($path), true);
         return User::fromArray($data);
+    }
+
+    public function displayUsers() {
+        $users = scandir("users");
+        if (!$users) {
+            echo "No users found";
+            return 0;
+        }
+        echo '<div id="user-window" style="display: none;">';
+        foreach ($users as $i => $file) {
+            if (!($file == '.' || $file == '..')) {
+                $path = $this->folder . "/" . $file;
+
+                $data = json_decode(file_get_contents($path), true);
+                $user = User::fromArray($data);
+
+                echo '<div class="user">
+                    <p> Username: ' . $user->username . '</p>
+                    <p> Password: ' . $user->password . '</p>
+                    <p> Admin: ' . ($user->admin == true ? 'true' : 'false') . '</p>
+                </div>';
+            }
+        }
+        echo '</div>';
     }
 }
 ?>

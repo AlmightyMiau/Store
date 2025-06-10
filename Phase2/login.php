@@ -27,6 +27,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <title>Login</title>
     </head>
     <body>
+        <!-- Top bar header -->
+        <header>
+            <div id="logo"><a href="index.php">Store</a></div>
+            <div id="nav">
+                <?php 
+                    if ($user->admin) {
+                        echo '<a href="admin.php">Admin</a>';
+                    }
+                    echo '<a href="viewCart.php">Cart</a>';
+                    if (!$logged) {
+                        echo '<a href="login.php">Login</a>';
+                        echo '<a href="register.php">Sign Up</a>';
+                    } else {
+                        echo '<a href="logout.php">Logout</a>';
+                    }
+                ?>
+            </div>
+            <?php if ($logged) {echo "<h3> Welcome, " . htmlspecialchars($user->username) . '! </h3>';} ?> 
+        </header>
         <h2>Login</h2>
         <form id="userInput" method="POST">
             Username: <input name="username"><br>

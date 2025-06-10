@@ -49,6 +49,25 @@ function addProduct($name, $desc, $price, $quantity) {
     $statement->execute(); // Execute statement
 }
 
+// Delete a product
+function deleteProduct($id) {
+    $servername = "localhost";
+    $username = "root";
+
+    // Create connection
+    $conn = new mysqli($servername, $username);
+
+    // Check connection
+    if ($conn->connect_error) {
+      die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Add a product into the table
+    $statement = $conn->prepare('DELETE FROM store.products WHERE ID=?'); // delete product
+    $statement->bind_param("i", $id); // bind parameters to values
+    $statement->execute(); // Execute statement
+}
+
 // change the quantity of the product with name $name to $quantity
 function setQuantity($id, $quantity) {
     $servername = "localhost";
@@ -79,7 +98,7 @@ function getProducts() {
     return $conn->query($sql);
 }
 
-// Display all of the records in the products database
+// Display records in the products database with quantity > 1
 function displayProducts() {
     $result = getProducts();
 
@@ -96,6 +115,30 @@ function displayProducts() {
                         <button onclick="addItemToCart(`' . $row["name"] . '`)">Add To Cart</button>
                     </div>';
             }
+        }
+        echo '</div>';
+      
+    } else {
+      echo "0 products in inventory :(";
+    }
+}
+
+// Display all of the records in the products database, including id, with hidden delete button
+function displayProductsFull() {
+    $result = getProducts();
+
+    if ($result->num_rows > 0) {
+        // output data of each row
+        echo '<div id="product-window" style="display: none;">';
+        while($row = $result->fetch_assoc()) {
+            echo '<div class="product">
+                    <p> ID: ' . $row["id"] . '
+                    <p> Name: ' . $row["name"] . '</p>
+                    <p> Description: ' . $row["description"] . '</p>
+                    <p> Price: $' . $row["price"] . '</p>
+                    <p> Quantity: ' . $row["quantity"] . '</p>
+                    <form method="POST"><button class="productDeleteBtn" name="DeleteItem" value="' . $row["id"] . '" type="submit" style="display: none;">Delete</button></form>
+                </div>';
         }
         echo '</div>';
       
