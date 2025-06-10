@@ -18,9 +18,16 @@
             $quantity = trim($_POST['quantity'] ?? '');
 
             addProduct($name, $desc, $price, $quantity);
-        } else if (isset($_POST['DeleteItem'])) {
+        } else if (isset($_POST['editItemName'])) { // Edit Product
+            $name = trim($_POST['editItemName'] ?? '');
+            $desc = trim($_POST['editDesc'] ?? '');
+            $price = trim($_POST['editPrice'] ?? '');
+            $quantity = trim($_POST['editQuantity'] ?? '');
+
+            editProduct($name, $desc, $price, $quantity);
+        } else if (isset($_POST['DeleteItem'])) { // Delete Product
             deleteProduct($_POST['DeleteItem']);
-        } else if (isset($_POST["createUsername"])) {
+        } else if (isset($_POST["createUsername"])) { // Create User
             $manager = new UserManagement();
             $username = trim($_POST['createUsername'] ?? '');
             $password = trim($_POST['createPassword'] ?? '');
@@ -31,7 +38,7 @@
             } else {
                 $message = "Please fill in all fields.";
             }
-        } else if (isset($_POST['DeleteUser'])) {
+        } else if (isset($_POST['DeleteUser'])) { // Delete User
             $manager = new UserManagement();
             $manager->deleteUser($_POST['DeleteUser']);
         }
@@ -77,7 +84,19 @@
                             <button id="submitProductBtn" type="submit">Submit</button>
                         </form>
                     </li>
-                    <!-- <li id="editProduct"><button onclick="EditProducts()">Edit</button></li> -->
+                    <li id="editProduct"><button onclick="EditProducts()">Edit</button>
+                        <form id="editProductForm" method="POST" style="padding: 5px; width: 30%; display: none;">
+                            <select name="editItemName" id="editItemName"><?php
+                                $products = getProducts();
+                                while($row = $products->fetch_assoc()) {
+                                    echo '<option value="' . $row["name"] . '">' . $row["name"] . '</option>';
+                                }
+                            ?></select><br>
+                            Description: <input name="editDesc"><br>
+                            Price: <input name="editPrice"><br>
+                            Quantity: <input name="editQuantity"><br>
+                            <button id="submitProductBtn" type="submit">Submit</button>
+                        </form></li>
                     <li id="deleteProduct"><button onclick="DeleteProducts()">Delete</button></li>
                     <div id="deleteProductHelper" style="display: none;"></div>
                 </ul>

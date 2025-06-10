@@ -31,7 +31,7 @@ function initProducts() {
 }
 
 // Create a product
-function addProduct($name, $desc, $price, $quantity) {
+function addProduct(string $name, string $desc, float $price, int $quantity) {
     $servername = "localhost";
     $username = "root";
 
@@ -46,6 +46,25 @@ function addProduct($name, $desc, $price, $quantity) {
     // Add a product into the table
     $statement = $conn->prepare('INSERT INTO store.products (Name, Description, Price, Quantity) VALUES (?, ?, ?, ?)'); // prepare statement
     $statement->bind_param("ssdi", $name, $desc, $price, $quantity); // bind parameters to values
+    $statement->execute(); // Execute statement
+}
+
+// Edit a product
+function editProduct($name, $desc, $price, $quantity) {
+    $servername = "localhost";
+    $username = "root";
+
+    // Create connection
+    $conn = new mysqli($servername, $username);
+
+    // Check connection
+    if ($conn->connect_error) {
+      die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Add a product into the table
+    $statement = $conn->prepare("UPDATE store.products SET description = ?, price = ?, quantity = ? WHERE Name = ?"); // prepare statement
+    $statement->bind_param("sdis", $desc, $price, $quantity, $name); // bind parameters to values
     $statement->execute(); // Execute statement
 }
 

@@ -13,30 +13,38 @@ function ViewProducts() {
 function CreateProducts() {
     if (document.getElementById("createProductForm").style.display == "none") {
         document.getElementById("createProductForm").style.display = "block";
-        // document.getElementById("editProduct").style.display = "none";
+        document.getElementById("editProduct").style.display = "none";
         document.getElementById("deleteProduct").style.display = "none";
     } else {
         document.getElementById("createProductForm").style.display = "none";
-        // document.getElementById("editProduct").style.display = "list-item";
+        document.getElementById("editProduct").style.display = "list-item";
         document.getElementById("deleteProduct").style.display = "list-item";
     }
 }
 function EditProducts() {
-
+    if (document.getElementById("editProductForm").style.display == "none") {
+        document.getElementById("editProductForm").style.display = "block";
+        document.getElementById("createProduct").style.display = "none";
+        document.getElementById("deleteProduct").style.display = "none";
+    } else {
+        document.getElementById("editProductForm").style.display = "none";
+        document.getElementById("createProduct").style.display = "list-item";
+        document.getElementById("deleteProduct").style.display = "list-item";
+    }
 }
 function DeleteProducts() {
     buttons = document.getElementsByClassName("productDeleteBtn");
     if (document.getElementById("deleteProductHelper").style.display == "none") {
         document.getElementById("deleteProductHelper").style.display = "block";
         document.getElementById("createProduct").style.display = "none";
-        // document.getElementById("editProduct").style.display = "none";
+        document.getElementById("editProduct").style.display = "none";
         for (let i = 0; i < buttons.length; i++) {
             buttons.item(i).style.display = "block";
         }
     } else {
         document.getElementById("deleteProductHelper").style.display = "none";
         document.getElementById("createProduct").style.display = "list-item";
-        // document.getElementById("editProduct").style.display = "list-item";
+        document.getElementById("editProduct").style.display = "list-item";
         for (let i = 0; i < buttons.length; i++) {
             buttons.item(i).style.display = "none";
         }
