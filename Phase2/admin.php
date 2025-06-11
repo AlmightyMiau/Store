@@ -10,33 +10,59 @@
         $user = User::fromArray($_SESSION['user']);
     }
 
+    $message = "";
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['createProductName'])) { // Create product
-            $name = trim($_POST['createProductName'] ?? '');
-            $desc = trim($_POST['desc'] ?? '');
-            $price = trim($_POST['price'] ?? '');
-            $quantity = trim($_POST['quantity'] ?? '');
+            if (
+                preg_match("/^[A-Za-z0-9_\-,><^ ]{3,25}$/", $_POST['createProductName']) &&
+                preg_match("/^[A-Za-z0-9_\-,><^ ]{3,60}$/", $_POST['desc']) &&
+                preg_match("/^[0-9]{1,3}[.][0-9]{1,2}$/", $_POST['price']) &&
+                preg_match("/^[0-9]{1,5}$/", $_POST['quantity'])
+            ) {
+                $name = trim($_POST['createProductName'] ?? '');
+                $desc = trim($_POST['desc'] ?? '');
+                $price = trim($_POST['price'] ?? '');
+                $quantity = trim($_POST['quantity'] ?? '');
 
-            addProduct($name, $desc, $price, $quantity);
+                $message = addProduct($name, $desc, $price, $quantity);
+            } else {
+                $message = "One of the fields is invalid";
+            }
         } else if (isset($_POST['editItemName'])) { // Edit Product
-            $name = trim($_POST['editItemName'] ?? '');
-            $desc = trim($_POST['editDesc'] ?? '');
-            $price = trim($_POST['editPrice'] ?? '');
-            $quantity = trim($_POST['editQuantity'] ?? '');
+            if (
+                preg_match("/^[A-Za-z0-9_\-,><^ ]{3,25}$/", $_POST['editItemName']) &&
+                preg_match("/^[A-Za-z0-9_\-,><^ ]{3,60}$/", $_POST['editDesc']) &&
+                preg_match("/^[0-9]{1,3}[.][0-9]{1,2}$/", $_POST['editPrice']) &&
+                preg_match("/^[0-9]{1,5}$/", $_POST['editQuantity'])
+            ) {
+                $name = trim($_POST['editItemName'] ?? '');
+                $desc = trim($_POST['editDesc'] ?? '');
+                $price = trim($_POST['editPrice'] ?? '');
+                $quantity = trim($_POST['editQuantity'] ?? '');
 
-            editProduct($name, $desc, $price, $quantity);
+                editProduct($name, $desc, $price, $quantity);
+            } else {
+                $message = "One of the fields is invalid";
+            }
         } else if (isset($_POST['DeleteItem'])) { // Delete Product
             deleteProduct($_POST['DeleteItem']);
         } else if (isset($_POST["createUsername"])) { // Create User
-            $manager = new UserManagement();
-            $username = trim($_POST['createUsername'] ?? '');
-            $password = trim($_POST['createPassword'] ?? '');
+            if (
+                preg_match("/^[A-Za-z0-9_-]{3,15}$/", $_POST['createUsername']) &&
+                preg_match("/((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!*@#$%]).{6,20})/", $_POST['createPassword'])
+            ) {
+                $manager = new UserManagement();
+                $username = trim($_POST['createUsername'] ?? '');
+                $password = trim($_POST['createPassword'] ?? '');
 
-            if ($username && $password) {
-                $newUser = new User($username, $password);
-                $manager->saveUser($newUser);
+                if ($username && $password) {
+                    $newUser = new User($username, $password);
+                    $manager->saveUser($newUser);
+                } else {
+                    $message = "Please fill in all fields.";
+                }
             } else {
-                $message = "Please fill in all fields.";
+                $message = "One of the fields is invalid";
             }
         } else if (isset($_POST['DeleteUser'])) { // Delete User
             $manager = new UserManagement();
@@ -71,6 +97,7 @@
             </div>
             <?php if ($logged) {echo "<h3> Welcome, " . htmlspecialchars($user->username) . '! </h3>';} ?> 
         </header>
+        <?php echo $message; ?>
         <div class="adminMenu">
             <span id="Products">
                 <button id="viewProducts" onclick="ViewProducts()">Products</button>
@@ -81,7 +108,7 @@
                             Description: <input name="desc"><br>
                             Price: <input name="price"><br>
                             Quantity: <input name="quantity"><br>
-                            <button id="submitProductBtn" type="submit">Submit</button>
+                            <button type="submit">Submit</button>
                         </form>
                     </li>
                     <li id="editProduct"><button onclick="EditProducts()">Edit</button>
@@ -95,7 +122,7 @@
                             Description: <input name="editDesc"><br>
                             Price: <input name="editPrice"><br>
                             Quantity: <input name="editQuantity"><br>
-                            <button id="submitProductBtn" type="submit">Submit</button>
+                            <button type="submit">Submit</button>
                         </form></li>
                     <li id="deleteProduct"><button onclick="DeleteProducts()">Delete</button></li>
                     <div id="deleteProductHelper" style="display: none;"></div>

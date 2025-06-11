@@ -47,6 +47,7 @@ function addProduct(string $name, string $desc, float $price, int $quantity) {
     $statement = $conn->prepare('INSERT INTO store.products (Name, Description, Price, Quantity) VALUES (?, ?, ?, ?)'); // prepare statement
     $statement->bind_param("ssdi", $name, $desc, $price, $quantity); // bind parameters to values
     $statement->execute(); // Execute statement
+    return $statement->error;
 }
 
 // Edit a product
@@ -281,5 +282,14 @@ function escape($string) {
         }
     }
     return '"' . $string . '"';
+}
+
+function unescape($string) {
+    for ($i = 0; $i < strlen($string); $i++) {
+        if ($string[$i] == '_') {
+            $string[$i] = ' ';
+        }
+    }
+    return $string;
 }
 ?>
