@@ -7,17 +7,22 @@ $manager = new UserManagement();
 $message = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username'] ?? '');
-    $password = trim($_POST['password'] ?? '');
+    if (
+        preg_match("/^[A-Za-z0-9_-]{3,15}$/", $_POST['username']) &&
+        preg_match("/((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!*@#$%]).{6,20})/", $_POST['password'])
+    ) {
+        $username = trim($_POST['username'] ?? '');
+        $password = trim($_POST['password'] ?? '');
 
-    $user = $manager->loadUser($username);
-    if ($user && $user->password === $password) {
-        $_SESSION['user'] = $user->toArray();
-        header("Location: index.php");
-        exit;
-    } else {
-        $message = "Invalid username or password.";
-    }
+        $user = $manager->loadUser($username);
+        if ($user && $user->password === $password) {
+            $_SESSION['user'] = $user->toArray();
+            header("Location: index.php");
+            exit;
+        } else {
+            $message = "Invalid username or password.";
+        }
+}
 }
 ?>
 <!DOCTYPE html>
@@ -32,19 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div id="logo"><a href="index.php">Store</a></div>
             <div id="nav">
                 <?php 
-                    if ($user->admin) {
-                        echo '<a href="admin.php">Admin</a>';
-                    }
-                    echo '<a href="viewCart.php">Cart</a>';
-                    if (!$logged) {
-                        echo '<a href="login.php">Login</a>';
-                        echo '<a href="register.php">Sign Up</a>';
-                    } else {
-                        echo '<a href="logout.php">Logout</a>';
-                    }
+                    echo '<a href="login.php">Login</a>';
+                    echo '<a href="register.php">Sign Up</a>';
                 ?>
             </div>
-            <?php if ($logged) {echo "<h3> Welcome, " . htmlspecialchars($user->username) . '! </h3>';} ?> 
         </header>
         <h2>Login</h2>
         <form id="userInput" method="POST">
@@ -54,31 +50,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
         <p style="color:red;"><?php echo $message; ?></p>
         <p><a href="register.php">Create New User</a></p>
-        <p><a href="blackjack.html">Play Blackjack</a></p>
     </body>
-    <script>
-        const form = document.getElementById('userInput');
-        const regexUsername = "^[A-Za-z0-9_-]{3,15}$";
-        const regexPassword = "((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!*@#$%]).{6,20})";
-        
-        const username = form.elements['username'];
-        const password = form.elements['password'];
-
-        function getRegExp(i){
-            return new RegExp(i);
-        }
-        
-        form.addEventListener("submit", function(e) {
-            if ( getRegExp(regexUsername).test(username.value)
-              && getRegExp(regexPassword).test(password.value)
-            ) {
-                return true; // Passes regEx tests, submit to server
-            } else {
-                // Fails regEx tests, alert user and don't submit to server
-                if (e.preventDefault) e.preventDefault(); // Stop the submit maybe
-                form.append("Failed input validation");
-                return false; 
-            }
-        });
-    </script>
 </html>

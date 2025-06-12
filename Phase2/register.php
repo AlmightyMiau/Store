@@ -6,16 +6,21 @@ $manager = new UserManagement();
 $message = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username'] ?? '');
-    $password = trim($_POST['password'] ?? '');
+    if (
+        preg_match("/^[A-Za-z0-9_-]{3,15}$/", $_POST['username']) &&
+        preg_match("/((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!*@#$%]).{6,20})/", $_POST['password'])
+    ) {
+        $username = trim($_POST['username'] ?? '');
+        $password = trim($_POST['password'] ?? '');
 
-    if ($username && $password) {
-        $user = new User($username, $password);
-        $manager->saveUser($user);
-        header("Location: index.php");
-        exit;
-    } else {
-        $message = "Please fill in all fields.";
+        if ($username && $password) {
+            $user = new User($username, $password);
+            $manager->saveUser($user);
+            header("Location: index.php");
+            exit;
+        } else {
+            $message = "Please fill in all fields.";
+        }
     }
 }
 ?>
@@ -31,19 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div id="logo"><a href="index.php">Store</a></div>
             <div id="nav">
                 <?php 
-                    if ($user->admin) {
-                        echo '<a href="admin.php">Admin</a>';
-                    }
-                    echo '<a href="viewCart.php">Cart</a>';
-                    if (!$logged) {
-                        echo '<a href="login.php">Login</a>';
-                        echo '<a href="register.php">Sign Up</a>';
-                    } else {
-                        echo '<a href="logout.php">Logout</a>';
-                    }
+                    echo '<a href="login.php">Login</a>';
+                    echo '<a href="register.php">Sign Up</a>';
                 ?>
             </div>
-            <?php if ($logged) {echo "<h3> Welcome, " . htmlspecialchars($user->username) . '! </h3>';} ?> 
         </header>
         <h2>Create New User</h2>
         <form id="userInput" method="POST">

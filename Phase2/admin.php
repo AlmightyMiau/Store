@@ -5,9 +5,14 @@
     require_once 'UserManagement.php';
 
     $logged = false;
-    if (isset($_SESSION['user'])) {
+    if (isset($_SESSION['user'])) { // check if logged in
         $logged = true;
         $user = User::fromArray($_SESSION['user']);
+        if (!($user->admin)) { // check if user is admin
+            header("Location: index.php");
+        }
+    } else {
+        header("Location: index.php");
     }
 
     $message = "";

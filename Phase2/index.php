@@ -15,7 +15,7 @@
     require_once 'User.php';
     require_once 'products.php';
     initProducts(); // Make sure the database and table is set up
-    addProduct("name :3", "desc :3", 42.06, 2); // This adds a product to the table (only adds one bc name has to be unique)
+    addProduct("Chad", "Very beefy", 50.00, 1); // This adds a product to the table (only adds one bc name has to be unique)
 
     $logged = false;
     if (isset($_SESSION['user'])) {
@@ -37,10 +37,12 @@
             <div id="logo"><a href="index.php">Store</a></div>
             <div id="nav">
                 <?php 
-                    if ($user->admin) {
-                        echo '<a href="admin.php">Admin</a>';
+                    if ($logged) {
+                        if ($user->admin) {
+                            echo '<a href="admin.php">Admin</a>';
+                        }
+                        echo '<a href="viewCart.php">Cart</a>';
                     }
-                    echo '<a href="viewCart.php">Cart</a>';
                     if (!$logged) {
                         echo '<a href="login.php">Login</a>';
                         echo '<a href="register.php">Sign Up</a>';
